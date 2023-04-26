@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo Vue</title>
+</head>
+<body>
+    
+    <div id="app">
+        <div v-html="text"></div>
+        <fieldset>
+            <legend>Dados</legend>
+            <p>Nome: {{firstName}}</p>
+            <p>Sobrenome: {{lastName}}</p>
+            <p>Idade: {{age}}</p>
+            <p>{{age >= 18 ? 'Maior de idade' : 'Menor de idade'}}</p>
+        </fieldset>
+
+        <fieldset>
+            <legend>Methods</legend>
+            <button v-on:click="addAge">Idade +1</button>
+            <button @click="subAge">Idade -1</button> <!-- v-on:click é o mesmo que @click / 'v-on' pode ser substituido por '@' -->
+        </fieldset>
+
+        <fieldset>
+            <legend>Computed</legend>
+            <p>Nome Completo: {{fullName}}</p>
+            <p>Nome Completo: {{fullName}}</p>
+            <p>Nome Completo: {{fullName}}</p>
+
+
+            <p>Nome Completo: {{getFullName()}}</p>
+            <p>Nome Completo: {{getFullName()}}</p>
+            <p>Nome Completo: {{getFullName()}}</p>
+        </fieldset>
+
+        <fieldset>
+            <legend>Watcher</legend>
+            <label for="address">Endereço: </label>
+            <input id="address" type="text" v-model="address">
+        </fieldset>
+
+        <fieldset> <!-- A principal diferença entre o 'v-if' e suas variaçoes e o 'v-show' é que, 
+                        o primeiro só renderiza no DOM o elemento quando as codições do 'v-if' são verdadeiras 
+                        enquanto no 'v-show' o elemento ja está no DOM mas ela escondido por uma classe CSS
+                        a dica é usar o 'v-if' e variações em elementos que não são mudados com tanta frequencia
+                        enquanto o 'v-show' é para elementos que são alterados com mais frequencia  -->
+            <legend>v-if / v-else-if / v-else</legend>
+            <label for="nota">Nota</label>
+            <input id="nota" type="text" v-model="nota">
+    
+            <p v-if="nota < 60">Reprovado</p>
+            <p v-else-if="nota >= 60 && nota < 98">Aprovado</p>
+            <p v-else-if="nota >= 98">Aprovado com Excelencia</p>
+            <p v-else>Valor invalido</p>
+        </fieldset>
+        
+        <fieldset>
+            <legend>v-show</legend>
+            <button v-show="show" @click="show = false">Login</button>
+            <button v-show="!show" @click="show = true">Logout</button>
+        </fieldset>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = {
+            data(){
+                return{
+                    text: "<h2>Hello Word Vue3!</h2>",
+                    firstName: "John",
+                    lastName: "Snow",
+                    age: 30,
+                    address:'',
+                    show: true,
+                    nota: 0
+                }
+            },
+            methods:{
+                addAge(){
+                    this.age++;
+                },
+                subAge: function(){ // a declaração de metodo tambem pode ser assim
+                    this.age--;
+                },
+                getFullName(){
+                    // console.log("method")
+                    return `${this.firstName} ${this.lastName}`
+                }
+            },
+            computed:{ // a principal diferença entre methods e computed, é que o computed guarda o valor em cache quando é chamado pela primeira vez, não precisando ser executado novamente para o valor é pegue, enquanto os methods são executados poda vez que são chamados
+                fullName(){
+                    // console.log("computed")
+                    return `${this.firstName} ${this.lastName}`
+                }
+            },
+            watch:{
+                address(newValue, oldValue){
+                    console.log(newValue);
+                    console.log(oldValue);
+                }
+            }
+        }
+
+        const vm = Vue.createApp(app).mount('#app')
+
+    </script>
+
+</body>
+</html>
