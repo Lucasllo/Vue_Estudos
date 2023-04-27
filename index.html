@@ -5,6 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estudo Vue</title>
+
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+
 </head>
 <body>
     
@@ -62,6 +69,92 @@
             <button v-show="show" @click="show = false">Login</button>
             <button v-show="!show" @click="show = true">Logout</button>
         </fieldset>
+
+        <fieldset>
+            <legend>v-text</legend>
+            <p v-text="firstName"></p> <!-- Mesma coisa que usar o '{{}}' -->
+            <p>{{firstName}}</p>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-html</legend>
+            <p v-html="text"></p>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-once</legend>
+            <p v-once>{{count}}</p> <!-- Só carrega a primeira vez e depois deixa de verificar as mudanças na variavel -->
+            <p>{{count}}</p>
+            <button @click="count++">Adicionar</button>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-for</legend>
+            <label for="">Marcas - Array</label>
+            <ul>
+                <li v-for="marca in marcas">{{marca}}</li>
+            </ul>
+
+            <label for="">Carros - Array of Object</label>
+            <ul>
+                <li v-for="carro in carros">{{carro.nome}} - {{carro.marca}}</li>
+            </ul>
+
+            <label for="">Carro - Object</label>
+            <ul>
+                <li v-for="(value, key, index) in carro">{{value}} - {{key}} - {{index}}</li>
+            </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-bind</legend>
+            <a href="https://www.google.com">Google</a>
+            <br/>
+            <a :href="url" v-bind:[property]="propertyValue">Google</a> <!-- 'v-bind' pode ser abreviado utilizando ':' 
+                                                                              só podem ser usados para url  -->
+        </fieldset>
+
+        <fieldset>
+            <legend>v-model</legend>
+            <input type="text" v-model="firstName">
+            <p>Primeiro nome: {{firstName}}</p>
+            
+            <hr>
+
+            <textarea  v-model="text" cols="60" rows="1"></textarea>
+            <p v-html="text"></p>
+
+            <hr>
+
+            <input type="checkbox" v-model="checked" id="">
+            <p>{{checked}}</p>
+
+            <hr>
+
+            <input type="radio" value="Um" id="um" v-model="radioValue">
+            <label for="um">Um</label>
+            <br>
+            <input type="radio" value="Dois" id="dois" v-model="radioValue">
+            <label for="dois">Dois</label>
+            
+            <p>{{radioValue}}</p>
+
+            <hr>
+
+            <select v-model="selectValue">
+                <option :value="carro" v-for="carro in carros">{{carro.nome}} - {{carro.marca}}</option>
+            </select>
+
+            <p>Carro selecionado: {{selectValue ? `${selectValue.nome} - ${selectValue.marca}` : ''}}</p>
+        </fieldset>
+
+        <fieldset>
+            <legend>v-cloak</legend>
+            <p>{{firstName}}</p>
+            <p v-cloak>{{firstName}}</p> <!-- 'v-cloak' é um atributo que some depois do carregamento completo da pagina, o que possibilita colocar algum css condicional. 
+                                                por exemplo, display none enquanto a pagina ainda não carrega completamente-->
+        </fieldset>
+
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -69,13 +162,23 @@
         const app = {
             data(){
                 return{
-                    text: "<h2>Hello Word Vue3!</h2>",
+                    text: "<h2 style='color:blue'>Hello Word Vue3!</h2>",
                     firstName: "John",
                     lastName: "Snow",
                     age: 30,
                     address:'',
                     show: true,
-                    nota: 0
+                    nota: 0,
+                    count: 0,
+                    marcas:["Renault", "Fiat", "Ford"],
+                    carros:[{ nome:"Ka", marca:"Ford" }, { nome:"Palio", marca:"Fiat" }, { nome:"Sandero", marca:"Renault" }],
+                    carro:{ nome:"Ka", marca:"Ford", ano:2023, km: 20000 },
+                    url:"https://www.google.com",
+                    property:"title",
+                    propertyValue:"Clique aqui",
+                    checked:false,
+                    radioValue:"",
+                    selectValue:""
                 }
             },
             methods:{
@@ -90,7 +193,9 @@
                     return `${this.firstName} ${this.lastName}`
                 }
             },
-            computed:{ // a principal diferença entre methods e computed, é que o computed guarda o valor em cache quando é chamado pela primeira vez, não precisando ser executado novamente para o valor é pegue, enquanto os methods são executados poda vez que são chamados
+            computed:{ // a principal diferença entre methods e computed
+                       // é que o computed guarda o valor em cache quando é chamado pela primeira vez, não precisando ser executado novamente para o valor é pegue
+                       // enquanto os methods são executados poda vez que são chamados
                 fullName(){
                     // console.log("computed")
                     return `${this.firstName} ${this.lastName}`
@@ -98,8 +203,8 @@
             },
             watch:{
                 address(newValue, oldValue){
-                    console.log(newValue);
-                    console.log(oldValue);
+                    console.log(`Novo valor: ${newValue}`);
+                    console.log(`Antigo valor: ${oldValue}`);
                 }
             }
         }
