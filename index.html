@@ -155,6 +155,60 @@
                                                 por exemplo, display none enquanto a pagina ainda não carrega completamente-->
         </fieldset>
 
+        
+        <fieldset>
+            <legend>Eventos</legend>
+            <button @click="eventDefault('@click')">eventDefault</button>
+            <hr>
+            <button @click="eventDefault">eventDefault sem parametro</button>
+            <hr>
+            <button @click="eventDefaultEvent('click', $event)">eventDefault com parametro de evento</button>
+            <hr>
+            <button @dblclick="eventDefault('@click')">eventDefault click duplo</button>
+            <hr>
+            <button @click.left="eventDefault('@click')">eventDefault left</button>
+            <hr>
+            <button @click.right.prevent="eventDefault('@click')">eventDefault right</button>
+            <hr>
+            <button @click.middle="eventDefault('@click')">eventDefault middle</button>
+            <hr>
+            <p @mouseenter="eventType" @mouseleave="eventType">Mouse hover here</p>
+            <hr>
+            <a :href="url" @click.prevent="showAlert('Bloqueado!')">GOOGLE</a>
+            <hr>
+            <a :href="url" @click.prevent.once="showAlert('Bloqueado!')">GOOGLE</a>
+            <hr>
+            <div>
+                <input type="text" @keyup.enter="eventKey" placeholder="Press Enter">
+                <hr>
+                <input type="text" @keyup.delete="eventKey" placeholder="Press Delete">
+                <hr>
+                <input type="text" @keyup.esc="eventKey" placeholder="Press ESC">
+                <hr>
+                <input type="text" @keyup.space="eventKey" placeholder="Press Space">
+                <hr>
+                <input type="text" @keyup.up="eventKey" placeholder="Press up">
+                <hr>
+                <input type="text" @keyup.down="eventKey" placeholder="Press down">
+                <hr>
+                <input type="text" @keyup.left="eventKey" placeholder="Press left">
+                <hr>
+                <input type="text" @keyup.right="eventKey" placeholder="Press right">
+                <hr>
+                <input type="text" @keydown.tab="eventKey" placeholder="Press tab">
+                <hr>
+                <input type="text" @keydown.ctrl="eventKey" placeholder="Press ctrl">
+                <hr>
+            </div>
+            <p @click.ctrl="eventDefault('Click + CTRL')">Click + CTRL</p>
+            <hr>
+            <p @click.ctrl.exact="eventDefault('Click + CTRL (EXACT)')">Click + CTRL (EXACT)</p>
+            <hr>
+            <p @click.alt="eventDefault('Click + ALT')">Click + ALT</p>
+            <hr>
+            <p @click.shift="eventDefault('Click + SHIFT')">Click + SHIFT</p>
+        </fieldset>
+
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -191,6 +245,22 @@
                 getFullName(){
                     // console.log("method")
                     return `${this.firstName} ${this.lastName}`
+                },
+                eventDefault(data){
+                    console.log(data);
+                },
+                eventDefaultEvent(data, event){
+                    console.log(data);
+                    console.log(event);
+                },
+                eventType(event){
+                    console.log(event.type)
+                },
+                showAlert(alerta){
+                  alert(alerta)
+                },
+                eventKey(event){
+                    console.log(event.type)
                 }
             },
             computed:{ // a principal diferença entre methods e computed
